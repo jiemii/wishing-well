@@ -29,7 +29,8 @@ class App extends Component {
     var index = Math.floor(Math.random() * wisdoms.length);
     
     this.state = {
-      wisdom: wisdoms[index]
+      wisdom: wisdoms[index],
+      author: authors[index],
     };
     
     this.setRandomWisdom = this.setRandomWisdom.bind(this);
@@ -55,12 +56,18 @@ class App extends Component {
     
     // add a new wisdom to the array, using the message's wisdom property
     var wisdom = message.wisdom;
+    var author = message.author;
     // modify wisdom somehow before pushing?
+    wisdom = wisdom.replace(":smile:", "smile😃")
+    if (wisdom.includes("tree")) { 
+    wisdom = wisdom + "🌲"; 
+}
     wisdoms.push(wisdom);
-    
+    authors.push(author);
     // show the last wisdom
     this.setWisdom(wisdoms.length-1);
   }
+
   
   setRandomWisdom() {
     var index = Math.floor(Math.random() * wisdoms.length);
@@ -71,25 +78,29 @@ class App extends Component {
   setWisdom(index) {
     // set wisdom based on an index
     this.setState({
-      wisdom: wisdoms[index]
+      wisdom: wisdoms[index],
+      author: authors[index]
     });
   }
   
   addWisdom() {
     // ask for wisdom
     var wisdom = prompt("What new wisdom do you offer?");
-    
+    var author = this.state.name
+
     // if there's no name set, ask for name
-    if (! this.state.name) {
+    if (! author) {
+      author = prompt("What is your name?")
       this.setState({
-        name: prompt("What is your name?")
+        name: author
       });
     }
     
     // make a message object
     var message = {
       type: "broadcast", 
-      wisdom: wisdom
+      wisdom: wisdom,
+      author: author,
     };
     
     // send it as a string to all other browsers
@@ -102,7 +113,7 @@ class App extends Component {
     var lastFiveWisdoms = wisdoms.slice(wisdoms.length-count);
     
     return lastFiveWisdoms.map((wisdom, index) => 
-      <li>
+      <li className="list">
         <span className="wisdom">{wisdom}</span>
         <span className="author">{lastFiveAuthors[index]}</span>
       </li>);
@@ -116,7 +127,10 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {this.state.wisdom}
+
+        <div className="list">
+        {this.lastListItems()}
+        </div>
         <button className="more" onClick={this.setRandomWisdom}>Another</button>
         <button className="new-wisdom" onClick={this.addWisdom}>New</button>
       </div>

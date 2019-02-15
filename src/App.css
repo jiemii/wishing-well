@@ -10,6 +10,22 @@
   color: white;
 }
 
+.list {
+    text-align: left;
+}
+
+
+.author{
+  text-align: left;
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
 
 .more {
   background: green;
